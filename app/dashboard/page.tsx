@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 import Header from "@/components/Header";
 import WorkoutForm from "@/components/WorkoutForm";
 import WorkoutList from "@/components/WorkoutList";
@@ -11,21 +9,10 @@ import type { WorkoutLog } from "@/types/workout";
 export default function Dashboard() {
   const [workouts, setWorkouts] = useState<WorkoutLog[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [pageLoading, setPageLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) {
-        router.push("/auth/login");
-        return;
-      }
-      fetchWorkouts();
-      setPageLoading(false);
-    };
-    checkAuth();
-  }, [router]);
+    fetchWorkouts();
+  }, []);
 
   const fetchWorkouts = async () => {
     try {
@@ -67,13 +54,13 @@ export default function Dashboard() {
     }
   };
 
-  if (pageLoading) {
-    return <div className="flex items-center justify-center min-h-screen">로딩 중...</div>;
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <header className="bg-blue-600 text-white p-4 shadow-lg">
+        <div className="flex justify-between items-center max-w-6xl mx-auto">
+          <h1 className="text-2xl font-bold">🏋️ 데일리 오운완 AI</h1>
+        </div>
+      </header>
       <main className="max-w-6xl mx-auto p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">
